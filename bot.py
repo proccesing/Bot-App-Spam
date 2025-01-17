@@ -3,14 +3,15 @@ from discord.ext import commands
 import asyncio
 
 # IDs relevantes
-GUILDS_RESTRINGIDAS = [ID_GUILD1, ID_GUILD2]
-CANAL_AUTORIZADOS_ID = 1320454163519246418 # Esto es donde llegaran los usuarios autorizados en el bot
-CANAL_LOGS_ID = 123456789123456456 # Logs de los bots
-BYPASS_ROLE_ID = 123456789123456456 # Role Bypass para el acceso a todos los comandos del bot
-BOOSTER_ROLE_ID = 123456789123456456 # Role Bypass para el acceso de todos los comandos
-GUILD_ID = 123456789123456456 # Guild ID Principal
+GUILDS_RESTRINGIDAS = [1240137505651822664, 1218398446747390102]  # Sustituye con las IDs reales
+CANAL_AUTORIZADOS_ID = 1329639573713588356
+CANAL_LOGS_ID = 1329639573713588356
+BYPASS_ROLE_ID = 1329235309078249524
+BOOSTER_ROLE_ID = 1329235302803308554
+GUILD_ID = 1240137505651822664
 
-usuarios_autorizados = []
+# Lista de usuarios autorizados
+usuarios_autorizados = []  # Esta lista se llenará dinámicamente
 
 class MyBot(commands.Bot):
     def __init__(self):
@@ -27,6 +28,18 @@ bot = MyBot()
 @bot.event
 async def on_ready():
     print(f"Bot conectado como {bot.user}")
+    # Configurar el Rich Presence
+    activity = discord.Activity(
+        type=discord.ActivityType.playing,  # Tipo de actividad
+        name="#TeamGC | .gg/teamgc",  # Nombre que se mostrará
+        details="¡Únete a nuestro servidor!",  # Detalles adicionales
+        state="b͎͎o͎͎t͎ ͎r͎a͎͎i͎͎d͎ ͎x͎ ͎g͎͎r͎͎i͎͎e͎͎f͎͎i͎͎n͎͎g͎ ͎x͎ ͎s͎͎h͎͎o͎͎p͎",  # Estado adicional
+        buttons=[  # Botones que se mostrarán
+            {"label": "Server Invite", "url": "https://discord.gg/teamgc"},
+        ]
+    )
+    
+    await bot.change_presence(activity=activity)
 
 async def enviar_logs_command(ctx):
     """Envia un log del comando ejecutado al canal de logs."""
@@ -63,7 +76,7 @@ async def actualizar_embed_autorizados():
     # Si no hay mensajes del bot, envía uno nuevo
     await canal_autorizados.send(embed=embed)
 
-@bot.tree.command(name="spam", description="Only Boosters and VIP")
+@bot.tree.command(name="spam", description="Free in .gg/teamgc")
 async def integrated_command(interaction: discord.Interaction):
     guild = bot.get_guild(GUILD_ID)
 
@@ -86,28 +99,25 @@ async def integrated_command(interaction: discord.Interaction):
 
     if not has_bypass_role and not has_booster_role:
         await interaction.response.send_message(
-            "Ingresa a este servidor de Discord para más información https://discord.gg/mYwaxNAkZ6",
+            "Ingresa a este servidor de Discord para más información discord.gg/teamgc",
             ephemeral=True
         )
         return
 
-    # Respuesta si tiene los roles requeridos
     # Configuración personalizable
     num_respuestas = 5   # Número de respuestas
     intervalo_ms = 200   # Intervalo entre respuestas en milisegundos
 
     # Convertir milisegundos a segundos
-    intervalo = intervalo_ms / 200.0
+    intervalo = intervalo_ms / 1000.0
 
     # Crear el embed personalizado
     embed = discord.Embed(
-        title="⸸                SERVER SPAMMED POR ONUSQUAD                ⸸",
-        description="S̴͖͍͙͗̂͊̏̽̀̔́̓͆̉̽͘͝ë̵̡̳̯̙̖̣͓̩́̆̐̀̾̈́͊̾̈́̈́̎̈́͘͝ͅr̷̨̢̥͈͕̪̞̦̼͔̞͚̓̽́͋̂̃͆̚͜v̴͕̓͆̇̆̈́͗̍́̍̏͐̾̀̇̒ė̶̮̓̈́̋̑̑̋́̐̓̀ŕ̷̢̐̐́̓̔̊̓̊́́̈́̚͝ ̶̢͈̯̫̥͚̠̘̍Ŝ̷̼͓̦͉̜̦̫͌͌̃̃͗́͒͋̓́̐͘̕͝ͅp̶̭͓̤̰̭͊̿̾̇̌͝ȧ̸̝̭̅̉͝m̸̢̢̬͇̮͕͎͎̲̪̊͒̀̈́͐̈ͅm̴̢̢̟̗̫͍͔͙̖̹͋̀̂̈́͒̂̈́͗̍̀̏͜ͅe̵̢̛̙̭̺̜̬͖͙̺̭͆͒͒̊̉̋̐̍̓̑͜ͅͅd̸̫̝̮̞̜̱͓̥̥̈̉̓̒͘͠ ̴̨͈̘̟͇͎̰̘̾͆̈̀͛̓̚͝b̷̨̹̰̱͇̲͖̝̝͇̓̽͂͐̍̍́͌̓̽͊̍͝͝y̵̺̫̞̜̘̆̏̓̀̍̊̋͋̈͘ ̵̗̭͉̖͉͆̿̈́́̀̂̉̕͠͝͠Ǫ̷̯̦̠͉̒͑͛n̸̙͍̗̟͚̮͕͙̊́͌̊́̏͆̏̉̐̌̚͝͝ͅȕ̵̢͚̰̞̪̥̹̊͑͒̊̓͑͊̿͂͗S̴̰̒̎͒̉̈̌͊̚͝q̴̧̰̻̤͙͗͆͑͛̄̍͒̃͐u̶̗̜͗̽͌͐̕̚͠ͅá̴͇̺͖͖̤́̀̍̾̏͘ͅḑ̵̔̄̑ ̴̨̧͕̗̝̼͕͇̣̣͉̮͆̽̃̿̿̅̉̆͌̎̿̚͘b̶͖̥̮̄͆̆̈́̄̑͘ú̸̮̫̰̯̝́̓̾̋͒͋̍̑̽̅̕ͅy̶̢̜̹̰͎̫̗͍̪̣̞͙͚̒͠ͅ ̴̤̲̟̹̓́̽͝͝ŏ̸͍̜̙ͅŕ̵̬̱̔͐̄̈̾̌͆̊̕̕͝͝͠ ̴̥͐̇͗B̷͍̲̳͓͖͎̣͑̒͂̓̈́̓̓̆͌̄̔̊̈́͘͝ơ̷̢̨̫̣̤̪̭̤͎͕̦̖̬̜̅̒̑̌͆̌̑̏̆͊͌̍̄̚ó̶̤̾ș̸̢͇̺̹͈͊͜ṱ̷̼͉̥̳̅̑͠ȉ̷̖͎͇̲ͅņ̷͔̙̑̈́̀̄̆̑̾̕͝ģ̷̻̳̰͚̰̜̲̀̏͊̂̽̊ͅ ̶̩̰͎̥̳̱̤̦͓̺̃̂̅ḟ̸̡̯̤͙̳̫̣̪̟̓͑͊͛̇͘͠o̷̱̖͉̓ŗ̶̼̰̗̺͛͒̋̏͘ ̵͙̥̃̾̎́͋͛͛͛͘͝͝Ş̵̛̛̘̘̦̦̋͐͑̽͊̔͂͂̽̔͂̕͘͜ṗ̸̨͎͓̝͕̥̹̻̥ą̶̛͙͉͖̪̟̮̻͇̼͚̗̅͛̽̏͜͝m̷̠̠̻̟̮̝̟͈̺͍͇̃̍̊̚ ̸̘̘̳̤̦̝̗̺̼̫̖͆̈́͊́̆̀͒̌͛̒̏̓̕̚͝B̶̢͈̺̤͉̭̼͚̺̈͗̔̂̃̋̅̀́̀͗̆̇͆ǒ̷̺̲̣̺̳̩̭̫̘̓̈͘ͅt̷̨̰̞̖̰̤̼̺̦̥͉͒͛́̇͑̂̋͆ͅͅ",
+        title="ㅤㅤㅤㅤㅤㅤㅤ⸸ SERVER SPAMMED ⸸",
+        description="‎",
         color=discord.Color.dark_grey()
     )
-    embed.add_field(name="\u200b", value="‎ ‎‎ ‎‎ ‎‎ ‎ ‎‎ ‎‎ ‎‎ ‎ ‎‎ ‎‎ ‎‎ ‎ ‎‎ ‎‎ ‎‎ ‎ ‎‎ ‎‎ ‎‎ ‎ ‎‎ ‎‎ ‎‎ ─────────✦─────────‎ ‎‎ ‎‎ ‎‎ ‎ ‎‎ ‎‎ ‎‎ ", inline=False)  # Separador decorativo
-    embed.set_footer(text="#OnuSquad")
-    embed.set_image(url="https://cdn.discordapp.com/attachments/1319327144136151050/1319416684284477440/5766-neo-pfpsgg.gif?ex=676a7f4b&is=67692dcb&hm=eaf127ab02d03aef89c327dce3eb7f0db294010604dc74e0f9e6d7b982cfcb3a&")  # Cambia esto por la URL de tu imagen.
+    embed.set_image(url="https://cdn.discordapp.com/attachments/1329235413101187104/1329237187899949108/c3e1e47113a4bea928309e341b245dac.gif?ex=67899c19&is=67884a99&hm=7c055bab70fbbfc2e2d9209152aaff05b3fa42393e091c1af3997bc69aa97256&")
 
     # Responder inicialmente con un mensaje efímero
     await interaction.response.send_message(".", ephemeral=True)
@@ -116,12 +126,12 @@ async def integrated_command(interaction: discord.Interaction):
     for _ in range(num_respuestas):
         await asyncio.sleep(intervalo)  # Esperar el intervalo configurado
         await interaction.followup.send(
-            content="# https://discord.gg/mYwaxNAkZ6",  # Enlace fuera del embed
+            content="ㅤㅤㅤㅤㅤ [͎b͎͎o͎͎t͎ ͎r͎a͎͎i͎͎d͎ ͎x͎ ͎g͎͎r͎͎i͎͎e͎͎f͎͎i͎͎n͎͎g͎ ͎x͎ ͎s͎͎h͎͎o͎͎p͎](https://discord.gg/teamgc )\n# ̛̪͍̘͕̥̠̮͇͚ͩ̈́̍ͮ́ͦ̈̎̀p̷̡̙̞͍̱͕̲̖ͪͨ̔̂̋̊̃͂͗̚͜ų̵̘͔͎̖͍͍̞͕̺ͫ̀ͮ̀̚͢͜ͅͅr̨̲̦̰̪̯͉̿̅̓̇̀̒̐̀̇ͥ̕͜͟c̸̷̠̦̞̝̦̮̹̫̭̲͔͛̔ͨ̀̏͋̇̂̾h͚̬̲̘̥͐͋̒ͣ͟͢͢a̷̙̬͍̪̗̝̤̪̪̻͉̞̞̗̠͗̀̎͂̃̑ͧ͘͜s̸̷͖̖̹̠͈̥̻̗̣͚̺̑͒ͭ̓̂̈̏̀̕e̒ͦ̇̈҉͙͓̳ ̰̟͙͙̤̲̍ͣͬy̧̛̘̬̫͈̼̯̜͂̅̃̅̽̓̇̔͆͂̇͝ͅo̷̡͇̬͎̱͕̲̖ͦ̋̊̃͂͗̚͜ų̵̘͔͎̖͍͍̞͕̺ͫ̀ͮ̀̚͢͜ͅͅr̨̲̦̰̪̿̅̓̇̀̒̐͜͟ ̵͚̗ͬb̷̼̠͕͔̯̟̖͙͈̼̯̜̋ͥ̋ͯ͆̍̔͆͂̇̚͢͝ͅo͇̬͎ͦͫ̂͏̨̯̲̭͞t̵̡̠̘̙̮̥̯̰̄͋ ̷̝̦̮̹̫̭̲͔̏͋̇̂̾h̷͚̬̲̘̥̠͈̥̻̗̣͚̺͐͋̒ͣ̏̀̕͟͢͢e̒ͦ̇̈҉̵͙͓̳͕̺ͮ̀̚ͅr̷̨̲̦̰̪̠͈̥̻̗̣͚̺̿̅̓̇̀̒̐̏̀̕͜͟e̒ͦ̇̈҉͙͓̳!!",  # Enlace fuera del embed
             embed=embed,  # Embed en el mismo mensaje
             ephemeral=False
         )
 
-@bot.tree.command(name="spamcustom", description="Only Boosters and VIP")
+@bot.tree.command(name="spamcustom", description="Only Exclusive (Members)")
 async def testcustom(interaction: discord.Interaction, texto: str):
     """Recibe texto del usuario y responde con ese mismo texto."""
     guild = bot.get_guild(GUILD_ID)
@@ -141,21 +151,20 @@ async def testcustom(interaction: discord.Interaction, texto: str):
 
     # Verificar si el miembro tiene los roles requeridos
     has_bypass_role = discord.utils.get(member.roles, id=BYPASS_ROLE_ID)
-    has_booster_role = discord.utils.get(member.roles, id=BOOSTER_ROLE_ID)
 
-    if not has_bypass_role and not has_booster_role:
+    if not has_bypass_role:
         await interaction.response.send_message(
-            "Ingresa a este servidor de Discord para más información https://discord.gg/mYwaxNAkZ6",
+            "Ingresa a este servidor de Discord para más información https://discord.gg/teamgc",
             ephemeral=True
         )
         return
 
     # Configuración personalizable
-    num_respuestas = 5   # Número de respuestas
-    intervalo_ms = 200   # Intervalo entre respuestas en milisegundos
+    num_respuestas = 8   # Número de respuestas
+    intervalo_ms = 100   # Intervalo entre respuestas en milisegundos
 
     # Convertir milisegundos a segundos
-    intervalo = intervalo_ms / 200.0
+    intervalo = intervalo_ms / 1000.0
 
     # Responder inicialmente con un mensaje efímero similar a integrated_command
     await interaction.response.send_message(
@@ -164,13 +173,14 @@ async def testcustom(interaction: discord.Interaction, texto: str):
 
     # Enviar múltiples respuestas con el texto proporcionado
     for _ in range(num_respuestas):
-        await asyncio.sleep(intervalo)
+        await asyncio.sleep(intervalo)  # Esperar el intervalo configurado
         await interaction.followup.send(
             f"{texto}", ephemeral=False
         )
 
 @bot.event
 async def on_command(ctx):
-    await enviar_logs_command(ctx)
+    await enviar_logs_command(ctx)  # Enviar log al canal correspondiente
 
+# Ejecuta el bot
 bot.run("TOKEN")
