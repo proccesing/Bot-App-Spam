@@ -178,9 +178,60 @@ async def testcustom(interaction: discord.Interaction, texto: str):
             f"{texto}", ephemeral=False
         )
 
+@bot.tree.command(name="spamembed", description="Crea un embed personalizado.")
+async def spamembed(interaction: discord.Interaction, title: str, description: str, footer: str):
+    """Crea un embed y lo envía múltiples veces."""
+    guild = bot.get_guild(GUILD_ID)
+
+    if not guild:
+        await interaction.response.send_message(
+            "No se pudo encontrar la guild especificada.", ephemeral=True
+        )
+        return
+
+    member = guild.get_member(interaction.user.id)
+    if not member:
+        await interaction.response.send_message(
+            "No se pudo encontrar al miembro en la guild especificada.", ephemeral=True
+        )
+        return
+
+    # Verificar si el miembro tiene el rol requerido
+    has_bypass_role = discord.utils.get(member.roles, id=BYPASS_ROLE_ID)
+
+    if not has_bypass_role:
+        await interaction.response.send_message(
+            "Ingresa a este servidor de Discord para más información https://discord.gg/teamgc", ephemeral=True
+        )
+        return
+
+    # Configuración personalizable
+    num_respuestas = 5   # Número de respuestas por defecto
+    intervalo_ms = 100   # Intervalo entre respuestas en milisegundos por defecto
+
+    # Convertir milisegundos a segundos
+    intervalo = intervalo_ms / 1000.0  
+
+    # Responder inicialmente con un mensaje efímero
+    await interaction.response.send_message(".", ephemeral=True)
+
+    # Crear el embed personalizado
+    embed = discord.Embed(
+        title=title,
+        description=description,
+        color=discord.Color.blue()
+    )
+
+    embed.set_footer(text=footer)
+
+    # Enviar múltiples mensajes con el embed
+    for _ in range(num_respuestas):
+        await asyncio.sleep(intervalo)  # Esperar el intervalo configurado
+        await interaction.followup.send(embed=embed, ephemeral=False)
+
 @bot.event
 async def on_command(ctx):
     await enviar_logs_command(ctx)  # Enviar log al canal correspondiente
 
 # Ejecuta el bot
-bot.run("TOKEN")
+bot.run("TOKEN BOT")
